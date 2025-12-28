@@ -1,0 +1,28 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: cleanup-task
+spec:
+  steps:
+    - name: cleanup
+      image: python:3.9
+      script: |
+        echo "Cleaning up workspace"
+        rm -rf __pycache__ || true
+
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: test-task
+spec:
+  steps:
+    - name: install-deps
+      image: python:3.9
+      script: |
+        pip install nose
+
+    - name: run-tests
+      image: python:3.9
+      script: |
+        nosetests
